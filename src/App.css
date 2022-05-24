@@ -1,0 +1,37 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+    .btn {
+        @apply cursor-pointer inline-block text-center text-white py-2 px-4 rounded disabled:bg-gray-500;
+    }
+    .btn-primary {
+        @apply bg-primary;
+    }
+    .btn-dark {
+        @apply bg-gray-800 hover:bg-gray-900;
+    }
+    .btn-lg {
+        @apply text-2xl py-4 px-6;
+    }
+
+    .section {
+        @apply py-20;
+    }
+
+    .container {
+        @apply mx-auto px-4;
+    }
+
+    .form-group {
+        @apply mb-4;
+    }
+    .form-group label {
+        @apply block;
+    }
+
+    .form-control {
+        @apply px-4 py-3 rounded-lg placeholder:text-gray-600 text-gray-800 max-w-full border border-gray-600 hover:border-gray-800 focus:border-gray-800;
+    }
+}
