@@ -94,7 +94,7 @@ function App() {
     const deferredRows = useDeferredValue(rows);
 
     return (
-        <div className="app flex flex-col justify-center items-center lg:min-h-screen w-full bg-indigo-500">
+        <div className="app flex flex-col justify-center items-center min-h-screen w-full bg-indigo-500">
             <div className="app__content p-10 m-10 rounded-lg bg-white max-w-full w-[750px]">
                 <CalculatorForm submit={onSubmit}></CalculatorForm>
                 {deferredRows.length > 0 && (
