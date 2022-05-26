@@ -5,8 +5,11 @@ export interface CalculateFormState {
     unitAmount: number;
     monthlyInterest: number;
     savingsPercent: number;
+    savingsMin: number;
     targetAmount: number;
     initialUnits: number;
+    adtPaymentQty: number;
+    adtPaymentAmt: number;
 }
 
 export type CalculateFormProps = {
@@ -25,8 +28,11 @@ const CalculatorForm = ({ submit }: CalculateFormProps) => {
                     unitAmount: 550,
                     monthlyInterest: 20,
                     savingsPercent: 0,
+                    savingsMin: 0,
                     targetAmount: 500000,
                     initialUnits: 1,
+                    adtPaymentQty: 0,
+                    adtPaymentAmt: 0,
                 }}
                 onSubmit={(
                     values: CalculateFormState,
@@ -97,6 +103,19 @@ const CalculatorForm = ({ submit }: CalculateFormProps) => {
                                     />
                                 </div>
                                 <div className="form-group">
+                                    <label htmlFor="savingsMin">
+                                        Min Take Savings
+                                    </label>
+                                    <Field
+                                        id="savingsMin"
+                                        name="savingsMin"
+                                        className="form-control"
+                                        placeholder="5000"
+                                        type="number"
+                                        min="0"
+                                    />
+                                </div>
+                                <div className="form-group">
                                     <label htmlFor="targetAmount">
                                         Target Amount $
                                     </label>
@@ -120,7 +139,32 @@ const CalculatorForm = ({ submit }: CalculateFormProps) => {
                                         placeholder="1-50"
                                         type="number"
                                         min="0"
-                                        max="50"
+                                    />
+                                </div>
+                                <div className="form-group">
+                                    <label htmlFor="adtPaymentQty">
+                                        Adt. Purchase Qty
+                                    </label>
+                                    <Field
+                                        id="adtPaymentQty"
+                                        name="adtPaymentQty"
+                                        className="form-control"
+                                        placeholder="1-50"
+                                        type="number"
+                                        min="0"
+                                    />
+                                </div>
+                                <div className="form-group">
+                                    <label htmlFor="adtPaymentAmt">
+                                        Adt. Purchase Amount $
+                                    </label>
+                                    <Field
+                                        id="adtPaymentAmt"
+                                        name="adtPaymentAmt"
+                                        className="form-control"
+                                        placeholder="1-50"
+                                        type="number"
+                                        min="0"
                                     />
                                 </div>
                                 <div className="form-group text-left self-end">

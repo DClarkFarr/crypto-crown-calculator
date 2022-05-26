@@ -22,8 +22,11 @@ function App() {
         unitAmount,
         monthlyInterest,
         savingsPercent,
+        savingsMin,
         targetAmount,
         initialUnits,
+        adtPaymentAmt,
+        adtPaymentQty,
     }: CalculateFormState) => {
         const rs: Row[] = [];
 
@@ -50,13 +53,19 @@ function App() {
 
             let activePayment = payment;
 
-            if (
-                savingsPercent > 0 &&
-                poolAmount + poolAmount * (savingsPercent / 100) > cashPool
-            ) {
-                const toSave = (activePayment * savingsPercent) / 100;
-                savedAmount += toSave;
-                activePayment -= toSave;
+            if (adtPaymentQty > 0 && adtPaymentQty >= rs.length) {
+                poolAmount += adtPaymentAmt;
+            }
+
+            if (savingsMin < 1 || purchasedAmount >= savingsMin) {
+                if (
+                    savingsPercent > 0 &&
+                    poolAmount + poolAmount * (savingsPercent / 100) > cashPool
+                ) {
+                    const toSave = (activePayment * savingsPercent) / 100;
+                    savedAmount += toSave;
+                    activePayment -= toSave;
+                }
             }
 
             poolAmount += activePayment;
