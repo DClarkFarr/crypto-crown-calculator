@@ -12,8 +12,9 @@ export type BatchFormProps = {
     batch: BatchConfig;
     startMonth: number;
     submit: (id: string, data: BatchState) => void;
+    remove: (id: string) => void;
 };
-const BatchForm = ({ startMonth, batch, submit }: BatchFormProps) => {
+const BatchForm = ({ startMonth, batch, submit, remove }: BatchFormProps) => {
     return (
         <div className="calculator-form">
             <h3 className="font-semibold text-lg text-white">
@@ -114,6 +115,16 @@ const BatchForm = ({ startMonth, batch, submit }: BatchFormProps) => {
                                         type="submit"
                                     >
                                         {isSubmitting ? "..." : "Save"}
+                                    </button>
+                                </div>
+                                <div className="form-group text-left self-end">
+                                    <button
+                                        type="button"
+                                        disabled={isSubmitting}
+                                        className="btn bg-red-800 hover:bg-red-900"
+                                        onClick={() => remove(batch.id)}
+                                    >
+                                        &times;
                                     </button>
                                 </div>
                             </div>
