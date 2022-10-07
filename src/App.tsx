@@ -11,6 +11,8 @@ function App() {
     const batch = useBatchStore();
     const fund = useFundStore();
 
+    const [isGenerating, setIsGenerating] = useState(false);
+
     const deferredRows = useDeferredValue(batch.results);
 
     const handleFundSubmit = (data: FundState) => {
@@ -41,6 +43,14 @@ function App() {
         batch.clearResults();
     };
 
+    const onGenerate = () => {
+        setIsGenerating(true);
+
+        setTimeout(() => {
+            setIsGenerating(false);
+        }, 1000);
+    };
+
     return (
         <div className="app flex flex-col justify-center items-center min-h-screen w-full bg-indigo-500 p-10">
             <div className="app__fund p-10 mb-4 rounded-lg bg-gray-800 max-w-full w-[750px]">
@@ -57,9 +67,21 @@ function App() {
                 </div>
             </div>
             <div className="app__content p-10 rounded-lg bg-white max-w-full w-[750px]">
-                {fund.savings} and {fund.units}
                 {deferredRows.length > 0 && (
                     <CalculateTable rows={deferredRows} />
+                )}
+                {!deferredRows.length && (
+                    <button
+                        className="btn bg-emerald-800 hover:bg-emerald-900 w-full"
+                        onClick={onGenerate}
+                        disabled={isGenerating}
+                    >
+                        <div className="px-10 py-5">
+                            {isGenerating
+                                ? "Generating..."
+                                : "Generate Results"}
+                        </div>
+                    </button>
                 )}
             </div>
         </div>
