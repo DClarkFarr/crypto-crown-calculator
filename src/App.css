@@ -6,9 +6,7 @@
     .btn {
         @apply cursor-pointer inline-block text-center text-white py-2 px-4 rounded disabled:bg-gray-500;
     }
-    .btn-primary {
-        @apply bg-primary;
-    }
+
     .btn-dark {
         @apply bg-gray-800 hover:bg-gray-900;
     }
@@ -25,7 +23,7 @@
     }
 
     .form-group {
-        @apply mb-4;
+        @apply mb-2;
     }
     .form-group label {
         @apply block;
