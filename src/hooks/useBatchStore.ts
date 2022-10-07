@@ -1,6 +1,7 @@
-import { Moment } from "moment";
+import moment, { Moment } from "moment";
 import create from "zustand";
 import { v4 as uuidv4 } from "uuid";
+import { FundState } from "../components/FundForm";
 
 export type BatchConfig = {
     id: string;
@@ -12,16 +13,29 @@ export type BatchConfig = {
     duration: number;
 };
 
+export type InitialFunds = {
+    startingCash: number;
+    startingUnits: number;
+    startingSavings: number;
+};
+
+export type GenerateSettings = {
+    unitCost: number;
+    monthInterest: number;
+};
+
 export type BatchResult = {
     configId: string;
     month: number;
     date: Moment;
+    unitCost: number;
 
     startingCash: number;
     startingUnits: number;
     startingSavings: number;
 
     incomeAmount: number;
+    incomeInvestment: number;
 
     savingsAdded: number;
     unitsPurchased: number;
@@ -44,6 +58,11 @@ export type BatchStore = {
     ) => void;
     clearResults: () => void;
     getConfigMonthsBefore: (id: string) => number;
+    generateResults: (
+        configs: BatchConfig[],
+        initialFunds: InitialFunds,
+        settings: GenerateSettings
+    ) => BatchResult[];
 };
 
 const useBatchStore = create<BatchStore>((set, get) => {
@@ -103,6 +122,81 @@ const useBatchStore = create<BatchStore>((set, get) => {
         return months;
     };
 
+    const generateResults = (
+        configs: BatchConfig[],
+        initialFunds: InitialFunds,
+        settings: GenerateSettings
+    ) => {
+        const results: BatchResult[] = [];
+
+        let month = 0;
+        let cash = initialFunds.startingCash;
+        let units = initialFunds.startingUnits;
+        let savings = initialFunds.startingSavings;
+
+        configs.forEach((config) => {
+            for (let i = 0; i < config.duration; i++) {
+                const date = moment().add(month, "months");
+
+                const row = {
+                    configId: config.id,
+                    month: month + 1,
+                    date,
+                    unitCost: settings.unitCost,
+
+                    startingCash: cash,
+                    startingUnits: units,
+                    startingSavings: savings,
+                } as Partial<BatchResult>;
+
+                let incomeAmount =
+                    (settings.unitCost * units * settings.monthInterest) / 100;
+
+                let incomeInvestment = 0;
+
+                if (i === 0 && config.initialInvestment > 0) {
+                    // initial initial payment
+                    incomeInvestment += config.initialInvestment;
+                } else if (config.monthlyInvestment > 0) {
+                    // add monthly payment
+                    incomeInvestment += config.monthlyInvestment;
+                }
+
+                row.incomeAmount = incomeAmount;
+                row.incomeInvestment = incomeInvestment;
+
+                let savingsAdded = 0;
+                if (config.savingPercent > 0) {
+                    savingsAdded = (incomeAmount * config.savingPercent) / 100;
+                }
+
+                row.savingsAdded = savingsAdded;
+
+                cash += incomeAmount + incomeInvestment - savingsAdded;
+
+                let unitsPurchased = 0;
+                if (Math.floor(cash / settings.unitCost) > 0) {
+                    unitsPurchased = Math.floor(cash / settings.unitCost);
+                }
+                row.unitsPurchased = unitsPurchased;
+                row.unitsCost = unitsPurchased * settings.unitCost;
+
+                cash -= row.unitsCost;
+                units += unitsPurchased;
+                savings += savingsAdded;
+
+                row.endingCash = cash;
+                row.endingUnits = units;
+                row.endingSavings = savings;
+
+                results.push(row as BatchResult);
+                month++;
+            }
+        });
+
+        return results;
+    };
+
     return {
         configs: [],
         results: [],
@@ -112,6 +206,7 @@ const useBatchStore = create<BatchStore>((set, get) => {
         updateConfig,
         clearResults,
         getConfigMonthsBefore,
+        generateResults,
     };
 });
 

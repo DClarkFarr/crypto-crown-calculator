@@ -1,15 +1,16 @@
 import { useDeferredValue, useState } from "react";
 import "./App.css";
-import moment, { Moment } from "moment";
 import CalculateTable from "./components/CalculateTable";
 import useBatchStore, { BatchConfig } from "./hooks/useBatchStore";
 import useFundStore from "./hooks/useFundStore";
 import FundForm, { FundState } from "./components/FundForm";
 import ManageBatches from "./components/ManageBatches";
+import useConfigStore from "./hooks/useConfigStore";
 
 function App() {
     const batch = useBatchStore();
     const fund = useFundStore();
+    const settings = useConfigStore();
 
     const [isGenerating, setIsGenerating] = useState(false);
 
@@ -49,6 +50,21 @@ function App() {
         setTimeout(() => {
             setIsGenerating(false);
         }, 1000);
+
+        const results = batch.generateResults(
+            batch.configs,
+            {
+                startingCash: fund.cash,
+                startingSavings: fund.savings,
+                startingUnits: fund.units,
+            },
+            {
+                unitCost: settings.unitCost,
+                monthInterest: settings.monthInterest,
+            }
+        );
+
+        batch.setResults(results);
     };
 
     return (

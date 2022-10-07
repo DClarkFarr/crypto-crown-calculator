@@ -1,6 +1,6 @@
-import { Row } from "../App";
+import { BatchResult } from "../hooks/useBatchStore";
 
-const CalculateTable = ({ rows }: { rows: Row[] }) => {
+const CalculateTable = ({ rows }: { rows: BatchResult[] }) => {
     const thClass =
         "text-sm border-b dark:border-slate-600 font-medium p-4 pl-6 pt-4 pb-3 text-slate-400 dark:text-slate-200 text-left bg-slate-800 whitespace-nowrap";
 
@@ -11,19 +11,15 @@ const CalculateTable = ({ rows }: { rows: Row[] }) => {
             <thead>
                 <tr>
                     <th className={`${thClass} rounded-tl-lg`}>Date</th>
-                    <th className={thClass}>$ Payment</th>
+                    <th className={thClass}>$ Income</th>
                     <th className={thClass}>$ Savings</th>
-                    <th className={thClass}>$ Pool</th>
+                    <th className={thClass}>$ Cash</th>
                     <th className={thClass}>Units</th>
-                    <th className={`${thClass} rounded-tr-lg`}>$ Purchased</th>
                 </tr>
             </thead>
             <tbody>
                 {rows.map((r, i) => {
-                    let savingDiff = 0;
-                    if (i > 1 && r.savedAmount > rows[i - 1].savedAmount) {
-                        savingDiff = r.savedAmount - rows[i - 1].savedAmount;
-                    }
+                    const purchasedAmount = r.endingUnits * r.unitCost;
                     return (
                         <tr key={i}>
                             <td
@@ -31,22 +27,44 @@ const CalculateTable = ({ rows }: { rows: Row[] }) => {
                                     i + 1 === rows.length ? "rounded-bl-lg" : ""
                                 }`}
                             >
-                                {i + 1}
-                                <br />
+                                <div className="text-xs opacity-50">
+                                    Month {r.month}
+                                </div>
                                 {r.date.format("MM/YY")}
                             </td>
                             <td className={tdClass}>
-                                {r.payment.toLocaleString("en-US", {
-                                    style: "currency",
-                                    currency: "USD",
-                                })}
+                                {r.incomeInvestment > 0 && (
+                                    <div>
+                                        <div>
+                                            <span className="text-xs opacity-50">
+                                                Investment
+                                            </span>
+                                            {r.incomeInvestment.toLocaleString(
+                                                "en-US",
+                                                {
+                                                    style: "currency",
+                                                    currency: "USD",
+                                                }
+                                            )}
+                                        </div>
+                                    </div>
+                                )}
+                                <div>
+                                    <span className="text-xs opacity-50">
+                                        Interest
+                                    </span>
+                                    {r.incomeAmount.toLocaleString("en-US", {
+                                        style: "currency",
+                                        currency: "USD",
+                                    })}
+                                </div>
                             </td>
                             <td className={tdClass}>
-                                {savingDiff > 0 && (
+                                {r.savingsAdded > 0 && (
                                     <>
                                         <div className="text-xs text-green-600 -mt-4">
                                             +
-                                            {savingDiff.toLocaleString(
+                                            {r.savingsAdded.toLocaleString(
                                                 "en-US",
                                                 {
                                                     style: "currency",
@@ -56,27 +74,43 @@ const CalculateTable = ({ rows }: { rows: Row[] }) => {
                                         </div>
                                     </>
                                 )}
-                                {r.savedAmount.toLocaleString("en-US", {
+                                {r.endingSavings.toLocaleString("en-US", {
                                     style: "currency",
                                     currency: "USD",
                                 })}
                             </td>
                             <td className={tdClass}>
-                                {r.poolAmount.toLocaleString("en-US", {
-                                    style: "currency",
-                                    currency: "USD",
-                                })}
+                                <div>
+                                    <span className="text-xs opacity-50">
+                                        Starting
+                                    </span>
+                                    {r.startingCash.toLocaleString("en-US", {
+                                        style: "currency",
+                                        currency: "USD",
+                                    })}
+                                </div>
+                                <div>
+                                    <span className="text-xs opacity-50">
+                                        Ending
+                                    </span>
+                                    {r.endingCash.toLocaleString("en-US", {
+                                        style: "currency",
+                                        currency: "USD",
+                                    })}
+                                </div>
                             </td>
-                            <td className={tdClass}>{r.purchasedUnits}</td>
                             <td
                                 className={`${tdClass} ${
                                     i + 1 === rows.length ? "rounded-br-lg" : ""
                                 }`}
                             >
-                                {r.purchasedAmount.toLocaleString("en-US", {
-                                    style: "currency",
-                                    currency: "USD",
-                                })}
+                                <div># {r.endingUnits}</div>
+                                <div>
+                                    {purchasedAmount.toLocaleString("en-US", {
+                                        style: "currency",
+                                        currency: "USD",
+                                    })}
+                                </div>
                             </td>
                         </tr>
                     );
