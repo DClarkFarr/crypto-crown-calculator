@@ -88,7 +88,7 @@ function App() {
                     />
                 </div>
             </div>
-            <div className="app__content p-10 rounded-lg bg-white max-w-full w-[750px]">
+            <div className="app__content max-w-full w-[750px]">
                 {deferredRows.length > 0 && (
                     <CalculateTable rows={deferredRows} />
                 )}

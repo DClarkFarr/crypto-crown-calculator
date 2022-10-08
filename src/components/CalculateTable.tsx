@@ -35,9 +35,9 @@ const CalculateTable = ({ rows }: { rows: BatchResult[] }) => {
                             <td className={tdClass}>
                                 {r.incomeInvestment > 0 && (
                                     <div>
-                                        <div>
-                                            <span className="text-xs opacity-50">
-                                                Investment
+                                        <div className="-mt-4 text-lime-600">
+                                            <span className="text-xs pr-2 text-lime-600/75 w-[51px]">
+                                                Invst.
                                             </span>
                                             {r.incomeInvestment.toLocaleString(
                                                 "en-US",
@@ -49,8 +49,8 @@ const CalculateTable = ({ rows }: { rows: BatchResult[] }) => {
                                         </div>
                                     </div>
                                 )}
-                                <div>
-                                    <span className="text-xs opacity-50">
+                                <div className="text-cyan-600">
+                                    <span className="text-xs opacity-50 pr-2">
                                         Interest
                                     </span>
                                     {r.incomeAmount.toLocaleString("en-US", {
@@ -81,7 +81,7 @@ const CalculateTable = ({ rows }: { rows: BatchResult[] }) => {
                             </td>
                             <td className={tdClass}>
                                 <div>
-                                    <span className="text-xs opacity-50">
+                                    <span className="text-xs opacity-50 pr-2">
                                         Starting
                                     </span>
                                     {r.startingCash.toLocaleString("en-US", {
@@ -90,7 +90,7 @@ const CalculateTable = ({ rows }: { rows: BatchResult[] }) => {
                                     })}
                                 </div>
                                 <div>
-                                    <span className="text-xs opacity-50">
+                                    <span className="text-xs opacity-50 pr-2">
                                         Ending
                                     </span>
                                     {r.endingCash.toLocaleString("en-US", {
