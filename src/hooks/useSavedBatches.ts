@@ -34,6 +34,7 @@ export type SavedBatchesState = {
         initialFunds: InitialFunds,
         settings: GenerateSettings
     ) => void;
+    removeBatch: (id: string) => void;
 };
 
 const useSavedBatches = create<SavedBatchesState>()(
@@ -71,9 +72,16 @@ const useSavedBatches = create<SavedBatchesState>()(
                 }));
             };
 
+            const removeBatch = (id: string) => {
+                set((state) => ({
+                    batches: state.batches.filter((batch) => batch.id !== id),
+                }));
+            };
+
             return {
                 batches: [],
                 addBatch,
+                removeBatch,
             };
         },
         {

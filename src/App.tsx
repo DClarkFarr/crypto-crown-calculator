@@ -9,6 +9,7 @@ import useConfigStore from "./hooks/useConfigStore";
 import useSavedBatches from "./hooks/useSavedBatches";
 import IconArrowRight from "~icons/fa-solid/arrow-right";
 import IconArrowLeft from "~icons/fa-solid/arrow-left";
+import ManageSaved from "./components/ManageSaved";
 
 function App() {
     const batch = useBatchStore();
@@ -106,6 +107,12 @@ function App() {
         setSidebarIsOpen((s) => !s);
     };
 
+    const onRemoveSaved = (id: string) => {
+        saved.removeBatch(id);
+    };
+
+    const onApplySaved = (id: string) => {};
+
     return (
         <div className="app flex min-h-screen w-full bg-indigo-500 p-10 gap-x-2">
             <div className="flex flex-col">
@@ -170,7 +177,13 @@ function App() {
                                 Saved Results
                             </h2>
                         </div>
-                        <div className="p-4"></div>
+                        <div className="p-4">
+                            <ManageSaved
+                                rows={saved.batches}
+                                remove={onRemoveSaved}
+                                show={onApplySaved}
+                            />
+                        </div>
                     </div>
                 </div>
             </div>

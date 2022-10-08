@@ -114,7 +114,7 @@ const CalculateTable = ({
                                     i + 1 === rows.length ? "rounded-br-lg" : ""
                                 }`}
                             >
-                                <div># {r.endingUnits}</div>
+                                <div># {r.endingUnits.toLocaleString()}</div>
                                 <div>
                                     {purchasedAmount.toLocaleString("en-US", {
                                         style: "currency",
