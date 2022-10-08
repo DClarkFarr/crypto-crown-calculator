@@ -43,6 +43,7 @@ const ManageBatches = ({
                                 batch={batch}
                                 startMonth={startMonth}
                                 remove={remove}
+                                key={batch.id}
                             />
                         </div>
                     );

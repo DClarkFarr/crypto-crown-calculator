@@ -8,17 +8,19 @@ export interface FundState {
 
 export type CalculateFormProps = {
     submit: (data: FundState) => void;
+    initialFunds: { cash: number; savings: number; units: number };
 };
-const FundForm = ({ submit }: CalculateFormProps) => {
+const FundForm = ({ submit, initialFunds }: CalculateFormProps) => {
+    const key = JSON.stringify(initialFunds);
     return (
-        <div className="calculator-form">
+        <div className="calculator-form" key={key}>
             <h3 className="font-semibold text-lg text-white">Initial Funds</h3>
 
             <Formik
                 initialValues={{
-                    cash: "0",
-                    units: "0",
-                    savings: "0",
+                    cash: String(initialFunds.cash),
+                    units: String(initialFunds.units),
+                    savings: String(initialFunds.savings),
                 }}
                 onSubmit={(
                     values: FundState,

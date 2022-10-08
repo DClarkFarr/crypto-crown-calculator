@@ -5,11 +5,13 @@ const CalculateTable = ({
     rows,
     save,
     isSaving,
+    clear,
 }: {
     id?: string;
     rows: BatchResult[];
     isSaving: boolean;
     save: () => void;
+    clear: () => void;
 }) => {
     const thClass =
         "text-sm border-b dark:border-slate-600 font-medium p-4 pl-6 pt-4 pb-3 text-slate-400 dark:text-slate-200 text-left bg-slate-800 whitespace-nowrap";
@@ -126,13 +128,18 @@ const CalculateTable = ({
                     );
                 })}
             </tbody>
-            {!id && (
-                <tfoot>
-                    <tr>
-                        <th
-                            colSpan={5}
-                            className={`${thClass} rounded-lg text-right`}
-                        >
+            <tfoot>
+                <tr>
+                    <th colSpan={5} className={`${thClass} rounded-lg`}>
+                        <div className="flex gap-x-2 justify-end">
+                            {id && (
+                                <button
+                                    className="btn bg-gray-200 hover:bg-gray-400 text-black"
+                                    onClick={clear}
+                                >
+                                    Cancel
+                                </button>
+                            )}
                             <button
                                 className="btn bg-emerald-600 hover:bg-emerald-800"
                                 onClick={save}
@@ -140,10 +147,10 @@ const CalculateTable = ({
                             >
                                 {isSaving ? "Saving..." : "Save"}
                             </button>
-                        </th>
-                    </tr>
-                </tfoot>
-            )}
+                        </div>
+                    </th>
+                </tr>
+            </tfoot>
         </table>
     );
 };

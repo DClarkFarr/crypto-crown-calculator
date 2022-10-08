@@ -119,6 +119,8 @@ function App() {
         setIsSaving(true);
         setTimeout(() => {
             batch.clearResults();
+            batch.setConfigs([]);
+            setSelectedSavedId(null);
             setIsSaving(false);
         }, 500);
     };
@@ -156,12 +158,26 @@ function App() {
         setSelectedSavedId(savedBatch.id);
     };
 
+    const onClearSelected = () => {
+        setSelectedSavedId(null);
+        batch.clearResults();
+        batch.setConfigs([]);
+        fund.reset();
+    };
+
     return (
         <div className="app flex min-h-screen w-full bg-indigo-500 p-10 gap-x-2">
             <div className="flex flex-col">
                 <div className="app__fund p-10 mb-4 rounded-lg bg-gray-800 max-w-full w-[750px]">
                     <div className="mb-8">
-                        <FundForm submit={handleFundSubmit} />
+                        <FundForm
+                            submit={handleFundSubmit}
+                            initialFunds={{
+                                cash: fund.cash,
+                                savings: fund.savings,
+                                units: fund.units,
+                            }}
+                        />
                     </div>
                     <div>
                         <ManageBatches
@@ -180,6 +196,7 @@ function App() {
                             save={onSaveBatch}
                             isSaving={isSaving}
                             id={selectedSavedId || undefined}
+                            clear={onClearSelected}
                         />
                     )}
                     {!deferredRows.length && (
