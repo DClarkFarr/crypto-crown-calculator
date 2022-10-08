@@ -1,5 +1,5 @@
 import { useDeferredValue, useState } from "react";
-import "./App.css";
+import "./App.scss";
 import CalculateTable from "./components/CalculateTable";
 import useBatchStore, { BatchConfig } from "./hooks/useBatchStore";
 import useFundStore from "./hooks/useFundStore";
@@ -44,6 +44,11 @@ function App() {
         batch.clearResults();
     };
 
+    const removeBatch = (id: string) => {
+        batch.removeConfig(id);
+        batch.clearResults();
+    };
+
     const onGenerate = () => {
         setIsGenerating(true);
 
@@ -79,6 +84,7 @@ function App() {
                         batches={batch.configs}
                         update={updateBatch}
                         add={addBatch}
+                        remove={removeBatch}
                     />
                 </div>
             </div>

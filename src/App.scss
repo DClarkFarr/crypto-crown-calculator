@@ -33,3 +33,7 @@
         @apply px-4 py-3 rounded-lg placeholder:text-gray-600 text-gray-800 max-w-full border border-gray-600 hover:border-gray-800 focus:border-gray-800 w-full;
     }
 }
+
+.batches .batch-row:nth-child(even) {
+    @apply bg-gray-700;
+}

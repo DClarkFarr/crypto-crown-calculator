@@ -1,19 +1,20 @@
-import { useMemo } from "react";
 import { BatchConfig } from "../hooks/useBatchStore";
 import BatchForm, { BatchState } from "./BatchForm";
 
 export type ManageBatchesProps = {
+    batches: BatchConfig[];
     getConfigMonthsBefore: (id: string) => number;
     update: (id: string, b: Partial<Omit<BatchConfig, "id">>) => void;
     add: () => void;
-    batches: BatchConfig[];
+    remove: (id: string) => void;
 };
 
 const ManageBatches = ({
-    add,
     batches,
+    add,
     update,
     getConfigMonthsBefore,
+    remove,
 }: ManageBatchesProps) => {
     const handleBatchSubmit = (id: string, data: BatchState) => {
         const batch: Omit<BatchConfig, "id" | "position"> = {
@@ -36,11 +37,12 @@ const ManageBatches = ({
                 {batches.map((batch) => {
                     const startMonth = getConfigMonthsBefore(batch.id) + 1;
                     return (
-                        <div className="mb-4" key={batch.id}>
+                        <div className="batch-row mb-4 p-2" key={batch.id}>
                             <BatchForm
                                 submit={handleBatchSubmit}
                                 batch={batch}
                                 startMonth={startMonth}
+                                remove={remove}
                             />
                         </div>
                     );

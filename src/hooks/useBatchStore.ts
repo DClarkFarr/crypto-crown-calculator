@@ -63,6 +63,7 @@ export type BatchStore = {
         initialFunds: InitialFunds,
         settings: GenerateSettings
     ) => BatchResult[];
+    removeConfig: (id: string) => void;
 };
 
 const useBatchStore = create<BatchStore>((set, get) => {
@@ -98,6 +99,19 @@ const useBatchStore = create<BatchStore>((set, get) => {
             const index = cs.findIndex((c) => c.id === id);
             if (index > -1) {
                 cs[index] = { ...cs[index], ...config };
+                draft.configs = cs;
+            }
+
+            return draft;
+        });
+    };
+
+    const removeConfig = (id: string) => {
+        set((draft) => {
+            const cs = [...draft.configs];
+            const index = cs.findIndex((c) => c.id === id);
+            if (index > -1) {
+                cs.splice(index, 1);
                 draft.configs = cs;
             }
 
@@ -207,6 +221,7 @@ const useBatchStore = create<BatchStore>((set, get) => {
         clearResults,
         getConfigMonthsBefore,
         generateResults,
+        removeConfig,
     };
 });
 

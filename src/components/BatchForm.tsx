@@ -16,7 +16,7 @@ export type BatchFormProps = {
 };
 const BatchForm = ({ startMonth, batch, submit, remove }: BatchFormProps) => {
     return (
-        <div className="calculator-form">
+        <div className="batch-form">
             <h3 className="font-semibold text-lg text-white">
                 Investment Period {batch.position}{" "}
                 <small>
