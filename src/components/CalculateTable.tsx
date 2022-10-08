@@ -1,6 +1,16 @@
 import { BatchResult } from "../hooks/useBatchStore";
 
-const CalculateTable = ({ rows }: { rows: BatchResult[] }) => {
+const CalculateTable = ({
+    id,
+    rows,
+    save,
+    isSaving,
+}: {
+    id?: string;
+    rows: BatchResult[];
+    isSaving: boolean;
+    save: () => void;
+}) => {
     const thClass =
         "text-sm border-b dark:border-slate-600 font-medium p-4 pl-6 pt-4 pb-3 text-slate-400 dark:text-slate-200 text-left bg-slate-800 whitespace-nowrap";
 
@@ -116,6 +126,24 @@ const CalculateTable = ({ rows }: { rows: BatchResult[] }) => {
                     );
                 })}
             </tbody>
+            {!id && (
+                <tfoot>
+                    <tr>
+                        <th
+                            colSpan={5}
+                            className={`${thClass} rounded-lg text-right`}
+                        >
+                            <button
+                                className="btn bg-emerald-600 hover:bg-emerald-800"
+                                onClick={save}
+                                disabled={isSaving}
+                            >
+                                {isSaving ? "Saving..." : "Save"}
+                            </button>
+                        </th>
+                    </tr>
+                </tfoot>
+            )}
         </table>
     );
 };

@@ -37,3 +37,30 @@
 .batches .batch-row:nth-child(even) {
     @apply bg-gray-700;
 }
+
+.saved-toggle {
+    z-index: 5;
+    position: relative;
+
+    &__tooltip {
+        visibility: hidden;
+        pointer-events: none;
+        top: 5px;
+        left: 65px;
+    }
+
+    &:hover &__tooltip {
+        visibility: visible;
+    }
+}
+
+.sidebar {
+    top: 0;
+    z-index: 1;
+    transition: left 0.2s ease-out;
+    left: -100%;
+
+    &.open {
+        left: 0;
+    }
+}
