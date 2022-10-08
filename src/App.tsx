@@ -20,6 +20,7 @@ function App() {
     const [isGenerating, setIsGenerating] = useState(false);
     const [isSaving, setIsSaving] = useState(false);
     const [sidebarIsOpen, setSidebarIsOpen] = useState(false);
+    const [selectedSavedId, setSelectedSavedId] = useState<string | null>(null);
 
     const deferredRows = useDeferredValue(batch.results);
 
@@ -80,21 +81,40 @@ function App() {
     };
 
     const onSaveBatch = () => {
-        saved.addBatch(
-            {
-                configs: batch.configs,
-                results: batch.results,
-            },
-            {
-                startingCash: fund.cash,
-                startingSavings: fund.savings,
-                startingUnits: fund.units,
-            },
-            {
-                unitCost: settings.unitCost,
-                monthInterest: settings.monthInterest,
-            }
-        );
+        if (selectedSavedId) {
+            saved.updateBatch(
+                selectedSavedId,
+                {
+                    configs: batch.configs,
+                    results: batch.results,
+                },
+                {
+                    startingCash: fund.cash,
+                    startingSavings: fund.savings,
+                    startingUnits: fund.units,
+                },
+                {
+                    unitCost: settings.unitCost,
+                    monthInterest: settings.monthInterest,
+                }
+            );
+        } else {
+            saved.addBatch(
+                {
+                    configs: batch.configs,
+                    results: batch.results,
+                },
+                {
+                    startingCash: fund.cash,
+                    startingSavings: fund.savings,
+                    startingUnits: fund.units,
+                },
+                {
+                    unitCost: settings.unitCost,
+                    monthInterest: settings.monthInterest,
+                }
+            );
+        }
 
         setIsSaving(true);
         setTimeout(() => {
@@ -111,7 +131,30 @@ function App() {
         saved.removeBatch(id);
     };
 
-    const onApplySaved = (id: string) => {};
+    const onApplySaved = (id: string) => {
+        const savedBatch = saved.batches.find((b) => b.id === id);
+
+        if (!savedBatch) {
+            return;
+        }
+        batch.clearResults();
+
+        fund.setCash(savedBatch.initialFunds.startingCash);
+        fund.setSavings(savedBatch.initialFunds.startingSavings);
+        fund.setUnits(savedBatch.initialFunds.startingUnits);
+
+        batch.setConfigs(savedBatch.configs);
+
+        const results = batch.generateResults(
+            savedBatch.configs,
+            savedBatch.initialFunds,
+            savedBatch.settings
+        );
+
+        batch.setResults(results);
+
+        setSelectedSavedId(savedBatch.id);
+    };
 
     return (
         <div className="app flex min-h-screen w-full bg-indigo-500 p-10 gap-x-2">
@@ -136,6 +179,7 @@ function App() {
                             rows={deferredRows}
                             save={onSaveBatch}
                             isSaving={isSaving}
+                            id={selectedSavedId || undefined}
                         />
                     )}
                     {!deferredRows.length && (
