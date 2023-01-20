@@ -4,11 +4,12 @@ export interface FundState {
     units: string;
     savings: string;
     cash: string;
+    debts: string;
 }
 
 export type CalculateFormProps = {
     submit: (data: FundState) => void;
-    initialFunds: { cash: number; savings: number; units: number };
+    initialFunds: { [K in keyof FundState]: number };
 };
 const FundForm = ({ submit, initialFunds }: CalculateFormProps) => {
     const key = JSON.stringify(initialFunds);
@@ -21,6 +22,7 @@ const FundForm = ({ submit, initialFunds }: CalculateFormProps) => {
                     cash: String(initialFunds.cash),
                     units: String(initialFunds.units),
                     savings: String(initialFunds.savings),
+                    debts: String(initialFunds.debts),
                 }}
                 onSubmit={(
                     values: FundState,
@@ -35,7 +37,7 @@ const FundForm = ({ submit, initialFunds }: CalculateFormProps) => {
                 {({ isSubmitting }: FormikProps<FundState>) => {
                     return (
                         <Form>
-                            <div className="flex gap-x-4 gap-y-2">
+                            <div className="flex flex-wrap gap-x-4 gap-y-2">
                                 <div className="form-group">
                                     <label
                                         className="text-white opacity-75"
@@ -77,6 +79,21 @@ const FundForm = ({ submit, initialFunds }: CalculateFormProps) => {
                                     <Field
                                         id="savings"
                                         name="savings"
+                                        className="form-control"
+                                        placeholder="100"
+                                        type="text"
+                                    />
+                                </div>
+                                <div className="form-group">
+                                    <label
+                                        className="text-white opacity-75"
+                                        htmlFor="debts"
+                                    >
+                                        Debts
+                                    </label>
+                                    <Field
+                                        id="debts"
+                                        name="debts"
                                         className="form-control"
                                         placeholder="100"
                                         type="text"

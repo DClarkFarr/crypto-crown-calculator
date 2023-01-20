@@ -19,6 +19,7 @@ const ManageBatches = ({
     const handleBatchSubmit = (id: string, data: BatchState) => {
         const batch: Omit<BatchConfig, "id" | "position"> = {
             savingPercent: Number(data.savingPercent),
+            debtsPercent: Number(data.debtsPercent),
             monthlyInvestment: Number(data.monthlyInvestment),
             initialInvestment: Number(data.initialInvestment),
             duration: data.duration,

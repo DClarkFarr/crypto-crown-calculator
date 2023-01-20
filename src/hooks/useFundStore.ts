@@ -4,6 +4,8 @@ type FundStore = {
     units: number;
     savings: number;
     cash: number;
+    debts: number;
+    setDebts: (debts: number) => void;
     setUnits: (units: number) => void;
     setSavings: (savings: number) => void;
     setCash: (cash: number) => void;
@@ -23,6 +25,10 @@ const useFundStore = create<FundStore>((set, get) => {
         set({ cash });
     };
 
+    const setDebts = (debts: number) => {
+        set({ debts });
+    };
+
     const reset = () => {
         set({ units: 1, savings: 0, cash: 0 });
     };
@@ -31,9 +37,11 @@ const useFundStore = create<FundStore>((set, get) => {
         units: 1,
         savings: 0,
         cash: 0,
+        debts: 0,
         setUnits,
         setSavings,
         setCash,
+        setDebts,
         reset,
     };
 });

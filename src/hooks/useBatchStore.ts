@@ -6,8 +6,8 @@ import { FundState } from "../components/FundForm";
 export type BatchConfig = {
     id: string;
     position: number;
-
     savingPercent: number;
+    debtsPercent: number;
     monthlyInvestment: number;
     initialInvestment: number;
     duration: number;
@@ -17,6 +17,7 @@ export type InitialFunds = {
     startingCash: number;
     startingUnits: number;
     startingSavings: number;
+    startingDebts: number;
 };
 
 export type GenerateSettings = {
@@ -33,15 +34,18 @@ export type BatchResult = {
     startingCash: number;
     startingUnits: number;
     startingSavings: number;
+    startingDebts: number;
 
     incomeAmount: number;
     incomeInvestment: number;
 
     savingsAdded: number;
+    debtsPaid: number;
     unitsPurchased: number;
     unitsCost: number;
 
     endingCash: number;
+    endingDebts: number;
     endingUnits: number;
     endingSavings: number;
 };
@@ -147,6 +151,7 @@ const useBatchStore = create<BatchStore>((set, get) => {
         let cash = initialFunds.startingCash;
         let units = initialFunds.startingUnits;
         let savings = initialFunds.startingSavings;
+        let debts = initialFunds.startingDebts;
 
         configs.forEach((config) => {
             for (let i = 0; i < config.duration; i++) {
@@ -161,6 +166,7 @@ const useBatchStore = create<BatchStore>((set, get) => {
                     startingCash: cash,
                     startingUnits: units,
                     startingSavings: savings,
+                    startingDebts: debts,
                 } as Partial<BatchResult>;
 
                 let incomeAmount =
@@ -179,6 +185,15 @@ const useBatchStore = create<BatchStore>((set, get) => {
                 row.incomeAmount = incomeAmount;
                 row.incomeInvestment = incomeInvestment;
 
+                row.debtsPaid = 0;
+                if (config.debtsPercent > 0) {
+                    row.debtsPaid = Math.min(
+                        (incomeAmount * config.debtsPercent) / 100,
+                        debts
+                    );
+                    incomeAmount -= row.debtsPaid;
+                }
+
                 let savingsAdded = 0;
                 if (config.savingPercent > 0) {
                     savingsAdded = (incomeAmount * config.savingPercent) / 100;
@@ -196,12 +211,14 @@ const useBatchStore = create<BatchStore>((set, get) => {
                 row.unitsCost = unitsPurchased * settings.unitCost;
 
                 cash -= row.unitsCost;
+                debts -= row.debtsPaid;
                 units += unitsPurchased;
                 savings += savingsAdded;
 
                 row.endingCash = cash;
                 row.endingUnits = units;
                 row.endingSavings = savings;
+                row.endingDebts = debts;
 
                 results.push(row as BatchResult);
                 month++;

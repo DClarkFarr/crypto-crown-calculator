@@ -25,6 +25,7 @@ const CalculateTable = ({
                     <th className={`${thClass} rounded-tl-lg`}>Date</th>
                     <th className={thClass}>$ Income</th>
                     <th className={thClass}>$ Savings</th>
+                    <th className={thClass}>$ Debts</th>
                     <th className={thClass}>$ Cash</th>
                     <th className={thClass}>Units</th>
                 </tr>
@@ -92,6 +93,26 @@ const CalculateTable = ({
                                 })}
                             </td>
                             <td className={tdClass}>
+                                {r.debtsPaid > 0 && (
+                                    <>
+                                        <div className="text-xs text-green-600 -mt-4">
+                                            +
+                                            {r.debtsPaid.toLocaleString(
+                                                "en-US",
+                                                {
+                                                    style: "currency",
+                                                    currency: "USD",
+                                                }
+                                            )}
+                                        </div>
+                                    </>
+                                )}
+                                {r.endingDebts.toLocaleString("en-US", {
+                                    style: "currency",
+                                    currency: "USD",
+                                })}
+                            </td>
+                            <td className={tdClass}>
                                 <div>
                                     <span className="text-xs opacity-50 pr-2">
                                         Starting
@@ -116,7 +137,19 @@ const CalculateTable = ({
                                     i + 1 === rows.length ? "rounded-br-lg" : ""
                                 }`}
                             >
-                                <div># {r.endingUnits.toLocaleString()}</div>
+                                <div className="flex gap-x-2 items-center">
+                                    <div>
+                                        # {r.endingUnits.toLocaleString()}
+                                    </div>
+                                    {r.unitsPurchased > 0 && (
+                                        <>
+                                            <div className="text-xs text-green-600">
+                                                +
+                                                {r.unitsPurchased.toLocaleString()}
+                                            </div>
+                                        </>
+                                    )}
+                                </div>
                                 <div>
                                     {purchasedAmount.toLocaleString("en-US", {
                                         style: "currency",
@@ -130,7 +163,7 @@ const CalculateTable = ({
             </tbody>
             <tfoot>
                 <tr>
-                    <th colSpan={5} className={`${thClass} rounded-lg`}>
+                    <th colSpan={6} className={`${thClass} rounded-lg`}>
                         <div className="flex gap-x-2 justify-end">
                             {id && (
                                 <button

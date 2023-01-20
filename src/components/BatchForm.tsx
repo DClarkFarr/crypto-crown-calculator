@@ -3,6 +3,7 @@ import { BatchConfig } from "../hooks/useBatchStore";
 
 export interface BatchState {
     savingPercent: string;
+    debtsPercent: string;
     monthlyInvestment: number;
     initialInvestment: number;
     duration: number;
@@ -27,6 +28,7 @@ const BatchForm = ({ startMonth, batch, submit, remove }: BatchFormProps) => {
             <Formik
                 initialValues={{
                     savingPercent: String(batch.savingPercent),
+                    debtsPercent: String(batch.debtsPercent),
                     monthlyInvestment: batch.monthlyInvestment,
                     duration: batch.duration,
                     initialInvestment: batch.initialInvestment,
@@ -55,6 +57,21 @@ const BatchForm = ({ startMonth, batch, submit, remove }: BatchFormProps) => {
                                     <Field
                                         id="savingPercent"
                                         name="savingPercent"
+                                        className="form-control"
+                                        placeholder="100"
+                                        type="text"
+                                    />
+                                </div>
+                                <div className="form-group">
+                                    <label
+                                        className="text-white opacity-75"
+                                        htmlFor="debtsPercent"
+                                    >
+                                        Debts %
+                                    </label>
+                                    <Field
+                                        id="debtsPercent"
+                                        name="debtsPercent"
                                         className="form-control"
                                         placeholder="100"
                                         type="text"

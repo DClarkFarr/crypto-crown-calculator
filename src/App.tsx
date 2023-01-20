@@ -28,6 +28,7 @@ function App() {
         fund.setCash(parseFloat(data.cash));
         fund.setSavings(parseFloat(data.savings));
         fund.setUnits(parseFloat(data.units));
+        fund.setDebts(parseFloat(data.debts));
 
         batch.clearResults();
     };
@@ -39,6 +40,7 @@ function App() {
         }
         batch.addConfig({
             savingPercent: lastBatch?.savingPercent || 0,
+            debtsPercent: lastBatch?.debtsPercent || 0,
             monthlyInvestment: lastBatch?.monthlyInvestment || 0,
             initialInvestment: lastBatch?.initialInvestment || 0,
             duration: lastBatch?.duration || 12,
@@ -69,6 +71,7 @@ function App() {
             {
                 startingCash: fund.cash,
                 startingSavings: fund.savings,
+                startingDebts: fund.debts,
                 startingUnits: fund.units,
             },
             {
@@ -91,6 +94,7 @@ function App() {
                 {
                     startingCash: fund.cash,
                     startingSavings: fund.savings,
+                    startingDebts: fund.debts,
                     startingUnits: fund.units,
                 },
                 {
@@ -107,6 +111,7 @@ function App() {
                 {
                     startingCash: fund.cash,
                     startingSavings: fund.savings,
+                    startingDebts: fund.debts,
                     startingUnits: fund.units,
                 },
                 {
@@ -168,7 +173,7 @@ function App() {
     return (
         <div className="app flex min-h-screen w-full bg-indigo-500 p-10 gap-x-2">
             <div className="flex flex-col">
-                <div className="app__fund p-10 mb-4 rounded-lg bg-gray-800 max-w-full w-[750px]">
+                <div className="app__fund p-10 mb-4 rounded-lg bg-gray-800 max-w-full w-[800px]">
                     <div className="mb-8">
                         <FundForm
                             submit={handleFundSubmit}
@@ -176,6 +181,7 @@ function App() {
                                 cash: fund.cash,
                                 savings: fund.savings,
                                 units: fund.units,
+                                debts: fund.debts,
                             }}
                         />
                     </div>
@@ -189,7 +195,7 @@ function App() {
                         />
                     </div>
                 </div>
-                <div className="app__content max-w-full w-[750px]">
+                <div className="app__content max-w-full w-[800px]">
                     {deferredRows.length > 0 && (
                         <CalculateTable
                             rows={deferredRows}

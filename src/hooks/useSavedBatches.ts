@@ -25,6 +25,7 @@ export type SavedBatch = {
     totalUnits: number;
     totalCash: number;
     totalValue: number;
+    totalDebts: number;
 };
 
 export type SavedBatchesState = {
@@ -67,10 +68,12 @@ const useSavedBatches = create<SavedBatchesState>()(
                     totalSavings: row.endingSavings,
                     totalUnits: row.endingUnits,
                     totalCash: row.endingCash,
+                    totalDebts: row.endingDebts,
                     totalValue:
                         row.endingSavings +
                         row.endingCash +
-                        row.endingUnits * settings.unitCost,
+                        row.endingUnits * settings.unitCost -
+                        row.endingDebts,
                 };
 
                 set((state) => ({
@@ -100,6 +103,7 @@ const useSavedBatches = create<SavedBatchesState>()(
                     totalSavings: row.endingSavings,
                     totalUnits: row.endingUnits,
                     totalCash: row.endingCash,
+                    totalDebts: row.endingDebts,
                     totalValue:
                         row.endingSavings +
                         row.endingCash +
